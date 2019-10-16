@@ -59,7 +59,20 @@ namespace GoShortlinks
 
             app.UseHsts();
             app.UseHttpsRedirection();
-            app.UseMvc();
+            app.UseMvc(routes =>
+            {
+                // This mapping will send a arbitrary paths that aren't otherwise mapped
+                // by attribute-based routing to the RedirectionController. The path itself
+                // will be captured by the parameter "shortlinkId".
+                routes.MapRoute(
+                    name: "ShortlinkRedirection",
+                    template: "{**shortlinkId}",
+                    defaults: new
+                    {
+                        controller = "Redirection",
+                        action = "ResolveAndRedirect",
+                    });
+            });
         }
     }
 }

@@ -9,20 +9,20 @@ using Microsoft.AspNetCore.Mvc;
 namespace GoShortlinks.Controllers
 {
     /// <summary>
-    /// Controller that implements the shortlink management CRUD operations.
+    /// Controller that implements the shortlink management UX.
     /// </summary>
-    [Route("~/api/v1")]
-    public class ManagementApiController : Controller
+    [Route("~/")]
+    public class ManagementUXController : Controller
     {
         /// <summary>
-        /// A temporary placeholder API to validate that the service is running.
+        /// A temporary placeholder for the management UX.
         /// </summary>
-        /// <returns>A basic message.</returns>
+        /// <returns>A basic message rendered in an HTML page.</returns>
         [HttpGet]
-        public async Task<IActionResult> GetAsync()
+        public async Task<IActionResult> HomeAsync()
         {
             await Task.Yield();
-            return this.Content("Boo!");
+            return this.Content("<html><body><h1>Home Page!</h1></body></html>", "text/html");
         }
     }
 }
