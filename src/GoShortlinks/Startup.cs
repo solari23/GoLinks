@@ -36,10 +36,8 @@ namespace GoShortlinks
         /// <param name="services">The DI services container.</param>
         public void ConfigureServices(IServiceCollection services)
         {
-            // TODO: Temporary hack to appease analyzers.
-            this.Configuration.ToString();
-
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddCoreShortlinkServices(this.Configuration);
         }
 
         /// <summary>
