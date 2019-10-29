@@ -5,7 +5,7 @@
 
 using System.Threading.Tasks;
 
-namespace GoShortlinks.CoreServices
+namespace GoShortlinks.ShortlinkServices
 {
     /// <summary>
     /// The core service that provides shortlink access to shortlink data.

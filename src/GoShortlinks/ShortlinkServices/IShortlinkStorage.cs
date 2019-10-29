@@ -5,7 +5,7 @@
 
 using System.Threading.Tasks;
 
-namespace GoShortlinks.CoreServices
+namespace GoShortlinks.ShortlinkServices
 {
     /// <summary>
     /// Interface for a shortlink storage medium.

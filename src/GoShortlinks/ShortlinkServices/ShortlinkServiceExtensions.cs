@@ -4,7 +4,7 @@
 // ----------------------------------------------------------------------------------------------------------
 
 using GoShortlinks;
-using GoShortlinks.CoreServices;
+using GoShortlinks.ShortlinkServices;
 using Microsoft.Extensions.Configuration;
 
 namespace Microsoft.Extensions.DependencyInjection

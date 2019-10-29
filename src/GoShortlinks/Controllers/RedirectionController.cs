@@ -5,7 +5,8 @@
 
 using System;
 using System.Threading.Tasks;
-using GoShortlinks.CoreServices;
+
+using GoShortlinks.ShortlinkServices;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GoShortlinks.Controllers
