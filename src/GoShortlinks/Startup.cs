@@ -20,15 +20,22 @@ namespace GoShortlinks
         /// Initializes a new instance of the <see cref="Startup"/> class.
         /// </summary>
         /// <param name="configuration">The service configuration.</param>
-        public Startup(IConfiguration configuration)
+        /// <param name="env">Hosting environment metadata.</param>
+        public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
             this.Configuration = configuration;
+            this.HostingEnvironment = env;
         }
 
         /// <summary>
         /// Gets the service configuration.
         /// </summary>
         public IConfiguration Configuration { get; }
+
+        /// <summary>
+        /// Gets the hosting environment metadata.
+        /// </summary>
+        public IHostingEnvironment HostingEnvironment { get; }
 
         /// <summary>
         /// Initializes the DI container with dependency injected services.
@@ -44,13 +51,9 @@ namespace GoShortlinks
         /// Configures the ASP.Net Core middleware pipeline.
         /// </summary>
         /// <param name="app">The builder for the web app.</param>
-        /// <param name="env">Hosting environment metadata.</param>
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app)
         {
-            // TODO: Temporary hack to appease analyzers.
-            this.Configuration.ToString();
-
-            if (env.IsDevelopment())
+            if (this.HostingEnvironment.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
