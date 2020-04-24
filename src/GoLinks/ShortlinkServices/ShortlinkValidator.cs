@@ -9,6 +9,7 @@ using System.Globalization;
 using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Logging;
 
 namespace GoLinks.ShortlinkServices
 {
@@ -18,7 +19,21 @@ namespace GoLinks.ShortlinkServices
     public class ShortlinkValidator : IRouteConstraint
     {
         /// <summary>
-        /// A set of knowns static files that cannot be shortlinks.
+        /// Initializes a new instance of the <see cref="ShortlinkValidator"/> class.
+        /// </summary>
+        /// <param name="logger">The service telemetry logger.</param>
+        public ShortlinkValidator(ILogger<ShortlinkValidator> logger)
+        {
+            this.Logger = logger;
+        }
+
+        /// <summary>
+        /// Gets the service telemetry logger.
+        /// </summary>
+        public ILogger<ShortlinkValidator> Logger { get; }
+
+        /// <summary>
+        /// Gets a set of knowns static files that cannot be shortlinks.
         /// </summary>
         private static HashSet<string> KnownStaticFiles { get; } = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
         {
@@ -28,7 +43,7 @@ namespace GoLinks.ShortlinkServices
         };
 
         /// <summary>
-        /// A set of known directories that are serving SPA assets.
+        /// Gets a set of known directories that are serving SPA assets.
         /// </summary>
         private static HashSet<string> KnownSpaDirectories { get; } = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
         {
@@ -40,31 +55,37 @@ namespace GoLinks.ShortlinkServices
         /// Checks if the given shortlink candidate is of a valid shortlink format.
         /// </summary>
         /// <param name="candidate">The string to check.</param>
+        /// <param name="logger">The service telemetry logger.</param>
         /// <returns>True if the given candidate is a valid shortlink, false otheriwse.</returns>
-        public static bool IsValidShortlink(string candidate)
+        public static bool IsValidShortlink(string candidate, ILogger logger = null)
         {
             if (string.IsNullOrWhiteSpace(candidate))
             {
+                logger.LogInformation(new EventId(1212, "IsValidShortlink"), $"'{candidate}' is rejected because it is empty.");
                 return false;
             }
 
             if (KnownStaticFiles.Contains(candidate))
             {
+                logger.LogInformation(new EventId(1212, "IsValidShortlink"), $"'{candidate}' is rejected because it is a known static file.");
                 return false;
             }
 
             var topDirectory = candidate.Split('/').First();
             if (KnownSpaDirectories.Contains(topDirectory))
             {
+                logger.LogInformation(new EventId(1212, "IsValidShortlink"), $"'{candidate}' is rejected because it is a known static directory.");
                 return false;
             }
 
             if (candidate.EndsWith("hot-update.js", StringComparison.OrdinalIgnoreCase))
             {
                 // These are webpack artifacts that allow for hot re-compilation during development.
+                logger.LogInformation(new EventId(1212, "IsValidShortlink"), $"'{candidate}' is rejected a valid shortlink because it is a webpack file.");
                 return false;
             }
 
+            logger.LogInformation(new EventId(1212, "IsValidShortlink"), $"'{candidate}' is good to go!");
             return true;
         }
 
@@ -79,7 +100,9 @@ namespace GoLinks.ShortlinkServices
             if (values.TryGetValue(routeKey, out object rawRouteValue))
             {
                 var routeValue = Convert.ToString(rawRouteValue, CultureInfo.InvariantCulture);
-                return IsValidShortlink(routeValue);
+
+                this.Logger.LogInformation(new EventId(1211, "MatchCalled"), $"Attempting to match route for {routeValue}");
+                return IsValidShortlink(routeValue, this.Logger);
             }
 
             return false;

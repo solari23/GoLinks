@@ -3,8 +3,12 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // ----------------------------------------------------------------------------------------------------------
 
+using System;
+using System.Net;
+
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace GoLinks
 {
@@ -21,6 +25,14 @@ namespace GoLinks
         {
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
+                .ConfigureLogging(builder =>
+                {
+                    var appInsightsInstrumentationKey = Environment.GetEnvironmentVariable("APPINSIGHTS_INSTRUMENTATIONKEY") ?? string.Empty;
+                    builder.AddApplicationInsights(appInsightsInstrumentationKey);
+                    builder.AddFilter<Microsoft.Extensions.Logging.ApplicationInsights.ApplicationInsightsLoggerProvider>(
+                        string.Empty,
+                        LogLevel.Trace);
+                })
                 .Build()
                 .Run();
         }
