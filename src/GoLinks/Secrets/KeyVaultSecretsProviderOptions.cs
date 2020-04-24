@@ -5,7 +5,7 @@
 
 using System.Diagnostics.CodeAnalysis;
 
-namespace GoShortlinks.Secrets
+namespace GoLinks.Secrets
 {
     /// <summary>
     /// Configuration options for the <see cref="KeyVaultSecretsProvider"/>.

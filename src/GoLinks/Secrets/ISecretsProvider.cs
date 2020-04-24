@@ -5,7 +5,7 @@
 
 using System.Threading.Tasks;
 
-namespace GoShortlinks.Secrets
+namespace GoLinks.Secrets
 {
     /// <summary>
     /// Common interface for a provider that fetches secrets from a secure storage.

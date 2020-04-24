@@ -5,11 +5,12 @@
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
+
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
-namespace GoShortlinks
+namespace GoLinks
 {
     /// <summary>
     /// Initialization subroutines for the web service.
@@ -21,10 +22,10 @@ namespace GoShortlinks
         /// </summary>
         /// <param name="configuration">The service configuration.</param>
         /// <param name="env">Hosting environment metadata.</param>
-        public Startup(IConfiguration configuration, IHostingEnvironment env)
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             this.Configuration = configuration;
-            this.HostingEnvironment = env;
+            this.WebHostEnvironment = env;
         }
 
         /// <summary>
@@ -35,7 +36,7 @@ namespace GoShortlinks
         /// <summary>
         /// Gets the hosting environment metadata.
         /// </summary>
-        public IHostingEnvironment HostingEnvironment { get; }
+        public IWebHostEnvironment WebHostEnvironment { get; }
 
         /// <summary>
         /// Initializes the DI container with dependency injected services.
@@ -43,7 +44,7 @@ namespace GoShortlinks
         /// <param name="services">The DI services container.</param>
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddControllers();
             services.AddCoreShortlinkServices(this.Configuration);
         }
 
@@ -53,21 +54,21 @@ namespace GoShortlinks
         /// <param name="app">The builder for the web app.</param>
         public void Configure(IApplicationBuilder app)
         {
-            if (this.HostingEnvironment.IsDevelopment())
+            if (this.WebHostEnvironment.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
 
             app.UseHsts();
             app.UseHttpsRedirection();
-            app.UseMvc(routes =>
+
+            app.UseRouting();
+
+            app.UseEndpoints(endpoints =>
             {
-                // This mapping will send a arbitrary paths that aren't otherwise mapped
-                // by attribute-based routing to the RedirectionController. The path itself
-                // will be captured by the parameter "shortlinkId".
-                routes.MapRoute(
+                endpoints.MapControllerRoute(
                     name: "ShortlinkRedirection",
-                    template: "{**shortlinkId}",
+                    pattern: "{**shortlinkId}",
                     defaults: new
                     {
                         controller = "Redirection",

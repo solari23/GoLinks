@@ -6,7 +6,7 @@
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 
-namespace GoShortlinks
+namespace GoLinks
 {
     /// <summary>
     /// Contains the main entry point for the application.

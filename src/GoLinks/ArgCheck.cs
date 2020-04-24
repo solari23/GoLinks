@@ -9,7 +9,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 
-namespace GoShortlinks
+namespace GoLinks
 {
     /// <summary>
     /// A collection of argument checking helpers.

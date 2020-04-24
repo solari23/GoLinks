@@ -3,8 +3,8 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // ----------------------------------------------------------------------------------------------------------
 
-using GoShortlinks;
-using GoShortlinks.ShortlinkServices;
+using GoLinks;
+using GoLinks.ShortlinkServices;
 using Microsoft.Extensions.Configuration;
 
 namespace Microsoft.Extensions.DependencyInjection

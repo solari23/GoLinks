@@ -9,7 +9,7 @@ using Microsoft.Azure.KeyVault;
 using Microsoft.Azure.Services.AppAuthentication;
 using Microsoft.Extensions.Options;
 
-namespace GoShortlinks.Secrets
+namespace GoLinks.Secrets
 {
     /// <summary>
     /// Implementation of <see cref="ISecretsProvider"/> that fetches secrets from Azure KeyVault.

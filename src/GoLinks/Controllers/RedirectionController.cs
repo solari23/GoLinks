@@ -6,10 +6,10 @@
 using System;
 using System.Threading.Tasks;
 
-using GoShortlinks.ShortlinkServices;
+using GoLinks.ShortlinkServices;
 using Microsoft.AspNetCore.Mvc;
 
-namespace GoShortlinks.Controllers
+namespace GoLinks.Controllers
 {
     /// <summary>
     /// Controller responsible for shortlinks resolution and redirection.

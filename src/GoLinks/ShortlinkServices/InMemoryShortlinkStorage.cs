@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace GoShortlinks.ShortlinkServices
+namespace GoLinks.ShortlinkServices
 {
     /// <summary>
     /// A static in-memory storage for shortlinks, used for testing in development environments.

@@ -5,7 +5,7 @@
 
 using System.Diagnostics.CodeAnalysis;
 
-namespace GoShortlinks.ShortlinkServices
+namespace GoLinks.ShortlinkServices
 {
     /// <summary>
     /// Data structure that holds information about a shortlink.

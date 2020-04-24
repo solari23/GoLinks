@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 using Microsoft.AspNetCore.Mvc;
 
-namespace GoShortlinks.Controllers
+namespace GoLinks.Controllers
 {
     /// <summary>
     /// Controller that implements the shortlink management CRUD operations.
