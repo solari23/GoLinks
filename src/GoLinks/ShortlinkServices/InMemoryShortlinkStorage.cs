@@ -24,7 +24,7 @@ namespace GoLinks.ShortlinkServices
                 new ShortlinkData
                 {
                     Id = "Test1",
-                    LongUrl = "https://github.com/solari23/GoShortlinks",
+                    LongUrl = "https://github.com/solari23/GoLinks",
                 }
             },
         };

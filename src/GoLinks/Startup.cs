@@ -5,7 +5,7 @@
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-
+using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -46,6 +46,17 @@ namespace GoLinks
         {
             services.AddControllers();
             services.AddCoreShortlinkServices(this.Configuration);
+
+            services.AddRouting(options =>
+            {
+                options.AddShortlinkRouteConstraint();
+            });
+
+            // In production, the React files will be served from this directory
+            services.AddSpaStaticFiles(configuration =>
+            {
+                configuration.RootPath = "ClientApp/build";
+            });
         }
 
         /// <summary>
@@ -61,6 +72,8 @@ namespace GoLinks
 
             app.UseHsts();
             app.UseHttpsRedirection();
+            app.UseStaticFiles();
+            app.UseSpaStaticFiles();
 
             app.UseRouting();
 
@@ -68,12 +81,22 @@ namespace GoLinks
             {
                 endpoints.MapControllerRoute(
                     name: "ShortlinkRedirection",
-                    pattern: "{**shortlinkId}",
+                    pattern: "{**shortlinkId:minlength(1):validShortlink}",
                     defaults: new
                     {
                         controller = "Redirection",
                         action = "ResolveAndRedirect",
                     });
+            });
+
+            app.UseSpa(spa =>
+            {
+                spa.Options.SourcePath = "ClientApp";
+
+                if (this.WebHostEnvironment.IsDevelopment())
+                {
+                    spa.UseReactDevelopmentServer(npmScript: "start");
+                }
             });
         }
     }

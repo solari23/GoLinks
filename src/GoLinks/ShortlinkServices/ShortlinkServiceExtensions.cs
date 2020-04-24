@@ -5,6 +5,7 @@
 
 using GoLinks;
 using GoLinks.ShortlinkServices;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 
 namespace Microsoft.Extensions.DependencyInjection
@@ -15,6 +16,11 @@ namespace Microsoft.Extensions.DependencyInjection
     /// </summary>
     public static class ShortlinkServiceExtensions
     {
+        /// <summary>
+        /// The name of the shortlink validating <see cref="IRouteConstraint"/>.
+        /// </summary>
+        public const string ShortlinkRouteConstraintName = "validShortlink";
+
         /// <summary>
         /// Adds the core shortlink services to the DI container.
         /// </summary>
@@ -31,6 +37,18 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddSingleton<IShortlinkStorage, InMemoryShortlinkStorage>();
             services.AddSingleton<ShortlinkRepository>();
             return services;
+        }
+
+        /// <summary>
+        /// Adds a custom <see cref="IRouteConstraint"/> called "validShortlink"
+        /// which can be used to match routes containing valid shortlinks.
+        /// </summary>
+        /// <param name="routeOptions">The <see cref="RouteOptions"/> configuration object.</param>
+        public static void AddShortlinkRouteConstraint(this RouteOptions routeOptions)
+        {
+            ArgCheck.NotNull(routeOptions, nameof(routeOptions));
+
+            routeOptions.ConstraintMap.Add(ShortlinkRouteConstraintName, typeof(ShortlinkValidator));
         }
     }
 }
