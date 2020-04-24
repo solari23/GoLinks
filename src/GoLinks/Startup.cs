@@ -46,6 +46,7 @@ namespace GoLinks
         {
             services.AddControllers();
             services.AddCoreShortlinkServices(this.Configuration);
+            services.AddShortlinkTelemetryHelpers(this.Configuration);
 
             services.AddRouting(options =>
             {
@@ -75,8 +76,11 @@ namespace GoLinks
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
 
+            app.UseShortlinkTelemetryHelpers();
+
             app.UseRouting();
 
+            // TODO: Add authN/Z middleware here.
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using GoLinks.Telemetry;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
@@ -61,31 +62,31 @@ namespace GoLinks.ShortlinkServices
         {
             if (string.IsNullOrWhiteSpace(candidate))
             {
-                logger.LogInformation(new EventId(1212, "IsValidShortlink"), $"'{candidate}' is rejected because it is empty.");
+                logger.LogInformation(TelemetryEvents.ShortlinkValidationResult, $"'{candidate}' is rejected because it is empty.");
                 return false;
             }
 
             if (KnownStaticFiles.Contains(candidate))
             {
-                logger.LogInformation(new EventId(1212, "IsValidShortlink"), $"'{candidate}' is rejected because it is a known static file.");
+                logger.LogInformation(TelemetryEvents.ShortlinkValidationResult, $"'{candidate}' is rejected because it is a known static file.");
                 return false;
             }
 
             var topDirectory = candidate.Split('/').First();
             if (KnownSpaDirectories.Contains(topDirectory))
             {
-                logger.LogInformation(new EventId(1212, "IsValidShortlink"), $"'{candidate}' is rejected because it is a known static directory.");
+                logger.LogInformation(TelemetryEvents.ShortlinkValidationResult, $"'{candidate}' is rejected because it is a known static directory.");
                 return false;
             }
 
             if (candidate.EndsWith("hot-update.js", StringComparison.OrdinalIgnoreCase))
             {
                 // These are webpack artifacts that allow for hot re-compilation during development.
-                logger.LogInformation(new EventId(1212, "IsValidShortlink"), $"'{candidate}' is rejected a valid shortlink because it is a webpack file.");
+                logger.LogInformation(TelemetryEvents.ShortlinkValidationResult, $"'{candidate}' is rejected a valid shortlink because it is a webpack file.");
                 return false;
             }
 
-            logger.LogInformation(new EventId(1212, "IsValidShortlink"), $"'{candidate}' is good to go!");
+            logger.LogInformation(TelemetryEvents.ShortlinkValidationResult, $"'{candidate}' is good to go!");
             return true;
         }
 
@@ -100,8 +101,6 @@ namespace GoLinks.ShortlinkServices
             if (values.TryGetValue(routeKey, out object rawRouteValue))
             {
                 var routeValue = Convert.ToString(rawRouteValue, CultureInfo.InvariantCulture);
-
-                this.Logger.LogInformation(new EventId(1211, "MatchCalled"), $"Attempting to match route for {routeValue}");
                 return IsValidShortlink(routeValue, this.Logger);
             }
 
